@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ckb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فێربوونی پیتەکانی کوردی</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        body {
+            font-family: 'Noto Sans Arabic', Arial, sans-serif;
+            background: linear-gradient(135deg, #FFE5F1 0%, #FFF3E6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        h1 {
+            color: #FF6B9B;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0px #FFE5F1;
+            animation: bounce 2s infinite;
+        }
+        
+        .letters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .letter-button {
+            background: white;
+            border: 5px solid #FFE5F1;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .letter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #FF6B9B, #FFB6D9);
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .letter-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 155, 0.2);
+        }
+        
+        .letter {
+            font-size: 3rem;
+            color: #FF6B9B;
+            margin: 10px 0;
+            text-shadow: 2px 2px 0px #FFE5F1;
+            animation: wobble 2s infinite;
+            display: inline-block;
+        }
+        
+        .letter-detail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 1000;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .letter-content {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 95%;
+            position: relative;
+            border: 5px solid #FFE5F1;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #FF6B9B;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .close-button:hover {
+            background: #FF8BB3;
+            transform: scale(1.1);
+        }
+        
+        .examples {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .example {
+            background: #FFE5F1;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            color: #FF8BB3;
+            transition: all 0.3s ease;
+        }
+        
+        .example:hover {
+            transform: scale(1.1);
+            background: #FFD6E6;
+        }
+        
+        .image-container {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 10px;
+        }
+        
+        /* Desktop - Row layout */
+        @media (min-width: 769px) {
+            .image-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        
+        /* Mobile - Column layout */
+        @media (max-width: 768px) {
+            .image-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 5px;
+            }
+        
+            .image-container > div {
+                padding: 8px;
+                margin-bottom: 10px;
+            }
+        
+            .image-container img {
+                border-width: 4px;
+                margin-bottom: 8px;
+            }
+        
+            .image-label {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+        }
+        
+        .image-container > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 12px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .image-container img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3.9px solid #FFB6D9;
+            margin-bottom: 12px;
+        }
+        
+        .image-label {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #FF6B9B;
+            padding: 8px 15px;
+            background: #FFE5F1;
+            border-radius: 10px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .clouds {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+            animation: float 15s infinite linear;
+        }
+        
+        .cloud:nth-child(1) { width: 100px; height: 40px; top: 10%; left: -100px; animation-duration: 20s; }
+        .cloud:nth-child(2) { width: 60px; height: 30px; top: 30%; left: -60px; animation-duration: 15s; }
+        .cloud:nth-child(3) { width: 80px; height: 35px; top: 50%; left: -80px; animation-duration: 18s; }
+        .cloud:nth-child(4) { width: 70px; height: 20px; top: 70%; left: -100px; animation-duration: 20s; }
+        .cloud:nth-child(5) { width: 40px; height: 25px; top: 65%; left: -60px; animation-duration: 15s; }
+        .cloud:nth-child(6) { width: 50px; height: 15px; top: 80%; left: -80px; animation-duration: 18s; }
+        
+        .image-container:has(> div:nth-child(n+4)) {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px dashed #FFE5F1;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            margin-top: 40px;
+            border-top: 3px solid #FFE5F1;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .footer-link {
+            color: #FF6B9B;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #FF8BB3;
+            transform: scale(1.05);
+        }
+        
+        .footer-divider {
+            color: #FFB6D9;
+            font-weight: bold;
+        }
+        
+        .footer-year {
+            color: #FF6B9B;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+
+        .action-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .action-button {
+            background: linear-gradient(135deg, #FF6B9B, #FFB6D9);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 35px;
+            color: white;
+            font-family: 'Noto Sans Arabic', Arial, sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 155, 0.3);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 155, 0.4);
+            background: linear-gradient(135deg, #FF8BB3, #FFD6E6);
+        }
+        
+        .action-button:active {
+            transform: translateY(1px);
+        }
+        
+        .action-text {
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        
+        
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            .action-button {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+            
+            .action-button-container {
+                margin-top: 15px;
+            }
+        }
+
+
+        /* Animations */
+        @keyframes float {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(100vw + 100px)); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        
+            h1 {
+                font-size: 2rem;
+            }
+        
+            .letter {
+                font-size: 2.5rem;
+            }
+        
+            .examples {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .letter-content {
+                padding: 15px;
+            }
+        
+            .image-container {
+                gap: 8px;
+            }
+        
+            .image-container > div {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+    
+    <div class="container">
+        <h1>فێربوونی پیتەکانی کوردی</h1>
+        
+        <div class="letters-grid">
+            <button class="letter-button" data-letter="د"   >
+                <div class="letter">د</div>
+            </button>
+            <button class="letter-button" data-letter="ر">
+                <div class="letter">ر</div>
+            </button>
+            <button class="letter-button" data-letter="ز">
+                <div class="letter">ز</div>
+            </button>
+            <button class="letter-button" data-letter="و">
+                <div class="letter">و</div>
+            </button>
+            <button class="letter-button" data-letter="ڕ">
+                <div class="letter">ڕ</div>
+            </button>
+            <button class="letter-button" data-letter="ۆ">
+                <div class="letter">ۆ</div>
+            </button>
+            <button class="letter-button" data-letter="ی">
+                <div class="letter">ی</div>
+            </button>
+            <button class="letter-button" data-letter="ئ">
+                <div class="letter">ئ</div>
+            </button>
+            <button class="letter-button" data-letter="ن">
+                <div class="letter">ن</div>
+            </button>
+            <button class="letter-button" data-letter="ژ">
+                <div class="letter">ژ</div>
+            </button>
+            <button class="letter-button" data-letter="ێ">
+                <div class="letter">ێ</div>
+            </button>
+            <button class="letter-button" data-letter="ب">
+                <div class="letter">ب</div>
+            </button>
+            <button class="letter-button" data-letter="س">
+                <div class="letter">س</div>
+            </button>
+            <button class="letter-button" data-letter="وو">
+                <div class="letter">وو</div>
+            </button>
+            <button class="letter-button" data-letter="م">
+                <div class="letter">م</div>
+            </button>
+            <button class="letter-button" data-letter="ت">
+                <div class="letter">ت</div>
+            </button>
+            <button class="letter-button" data-letter="ک">
+                <div class="letter">ک</div>
+            </button>
+        </div>
+        
+    </div>
+    <footer>
+        <div class="footer">
+            <div class="footer-content">
+                <a href="https://t.me/AW_Graphic_IT" target="_blank" class="footer-link">
+                    @ALAND
+                </a>
+                <span class="footer-divider">|</span>
+                <span class="footer-year">2025</span>
+            </div>
+        </div>
+    </footer>
+    <div class="letter-detail">
+        <div class="letter-content">
+            <button class="close-button">×</button>
+            <div class="letter"></div>
+            <div class="examples">
+                <span class="example"></span>
+                <span class="example"></span>
+            </div>
+            <div class="image-container">
+                <!-- Images will be dynamically inserted here -->
+            </div>
+
+            <div class="action-button-container">
+                <button class="action-button">
+                    <span class="action-text">وانەکان</span>
+                </button>
+        </div>
+    </div>
+
+
+    <script>
+        const letterData = {
+            'د': {
+                examples: ['دا', 'دە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-vector/plant-wooden-pot_1308-30818.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'دار' },
+                    { src: 'https://img.freepik.com/free-vector/luxury-red-curtains-victorian-style-with-drapery-tied-with-golden-cord_1441-1622.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'پەردە' },
+                    { src: 'https://img.freepik.com/premium-photo/open-mouth-woman-close-up_431835-1456.jpg?w=900', label: 'دەم' },
+                    { src: 'https://img.freepik.com/free-photo/vivid-blurred-colorful-wallpaper-background_58702-2874.jpg?t=st=1735646360~exp=1735649960~hmac=bc4f9822b4c361d1adb88d012fae77d02da437058437f96d12dbacc4a655f836&w=900', label: 'زەرد' }
+                ] ,
+                link: 'https://u.pcloud.link/publink/show?code=kZ06qTVZIYf2QxjLudyC9tjcw0AiSV9RKMNy'
+            },
+            'ر': {
+                examples: ['را', 'رە'],
+                images: [
+                    { src: 'https://images.indianexpress.com/2024/07/WhatsApp-Image-2024-07-18-at-13.43.36-1.jpeg', label: 'باران' },
+                    { src: 'https://img.freepik.com/free-photo/young-adult-having-fun-with-kite_23-2149326278.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'کۆلارە' },
+                    { src: 'https://wdlh.co.uk/wp-content/uploads/2023/05/DSC_2119-Orton-Effect-1783x1190.jpg', label: 'گرد' },
+                    { src: 'https://media.newyorker.com/photos/60c3b6520f4d2f5a9fabddb5/16:9/w_2559,h_1439,c_limit/Ciccone-PepTalkFromtheWallYouHit.jpg', label: 'دیوار' },
+                ] ,
+                link : "https://u.pcloud.link/publink/show?code=kZH6qTVZpWhYgV04wY0eg5r72f1omXKxxGhX"
+            },
+            'ز': {
+                examples: ['زا', 'زە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/bananas-white-background_1187-1671.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'مۆز' },
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-head-goat_181624-25449.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بزن' } ,
+                    { src: 'https://img.freepik.com/free-photo/wide-angle-shot-duck-goose-standing-each-other-small-house_181624-17521.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'قاز' } ,
+                    { src: 'https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'زانکۆ' } 
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZR6qTVZyxXDCIiN7y7PHbwV1VjvD8ybclok"
+                
+            },
+            'و': {
+                examples: ['وا', 'وە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'پیاو' },
+                    { src: 'https://img.freepik.com/free-photo/view-trucker-hat-with-mesh-back_23-2149410045.jpg?t=st=1735652303~exp=1735655903~hmac=efe5770af317a9b3a5720f21303739d9806acb8c7ea6b31b0c5a1163b33de39e&w=900', label: 'کڵاو' },
+                    { src: 'https://img.freepik.com/free-photo/variety-green-black-whole-olives_114579-35106.jpg?t=st=1735652416~exp=1735656016~hmac=de9ab508545f2ea32cc2655c449ad9b1b53c7bca606d395eb01d0e81c65249dd&w=900', label: 'زەیتون' },
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-grizzly-bear-laying-tree_181624-6971.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ورچ'  },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZY6qTVZqWnwO70KnSpxzlBTScd7B76xlldX"
+            },
+            'ڕ': {
+                examples: ['ڕا', 'ڕە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/hand-drawn-white-feather-blue-background_53876-103095.jpg?t=st=1735652651~exp=1735656251~hmac=0838e99388792212827bf25e7a9ff76e7aab72c9f737ccf2ff3584bc81133377&w=740', label: 'پەڕ' },
+                    { src: 'https://img.freepik.com/free-photo/head-white-sheep_181624-39135.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'مەڕ' } , 
+                    { src: 'https://img.freepik.com/premium-photo/13-august-calender-icon_1286238-593.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ڕۆژ' },
+                    { src: 'https://img.freepik.com/premium-photo/color-swatches-graphic-designers-putting-desk-table_35675-1008.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ڕەنگ' } , 
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZB6qTVZI8rwvwqngyzd9P84jOKCaHHBvC47"
+            },
+            'ۆ': {
+                examples: ['برۆ', 'نۆ'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/front-view-dovga-getting-poured-into-glass-salted-peppered-fresh-like-drink-with-greens-grey-background-soup-liquid_140725-15928.jpg?t=st=1735653102~exp=1735656702~hmac=7d7d2526a4bc37ccc9a94b1bafd64b129712cda9bcb5c08bb56c30b21f5902be&w=360', label: 'دۆ' },
+                    { src: 'https://img.freepik.com/free-photo/fresh-nectarines-plate-pink-textile-surface-high-angle-view_176474-8505.jpg?t=st=1735653150~exp=1735656750~hmac=8fe6a48071ccc963adf014604133432246145e548bcc7a40c48beac3bcbb748c&w=360', label: 'خۆخ' },
+                    { src: 'https://img.freepik.com/free-photo/chick-pea-wooden-bowl-wooden-surface-close-up_2829-8223.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'نۆک' },
+                    { src: 'https://img.freepik.com/free-photo/front-view-football-hexagonal-shape_23-2148796889.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'تۆپ' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZs6qTVZrD58MJQI0TSk9jGMlNnS8fpiCg4V"
+            },
+            'ی': {
+                examples: ['یا', 'یە'],
+                images: [
+                    { src: 'https://wallpapercrafter.com/desktop8/1968495-fish-tank-fish-goldfish-2K.jpg', label: 'ماسی' },
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-beautiful-turtle-swimming-sea_181624-21868.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'کیــــــسەڵ' },
+                    { src: 'https://img.freepik.com/free-photo/vertical-shot-duck-park-blurred-background_181624-61515.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'مراوی' },
+                    { src: 'https://img.freepik.com/free-photo/boy-playing-with-brain-teaser-toys_23-2149512009.jpg?ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'یاری' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZ16qTVZN90rv7RN7A5vz4xaChhetF5AFFpX"
+            },
+            'ئ': {
+                examples: ['ئا', 'ئە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/beautiful-unicorn-nature-composition_23-2150169277.jpg?t=st=1735653918~exp=1735657518~hmac=6d6fca665736d7d89a665a51a525f735f3ac8e8e3df97c056b8e1ae7f955fb6d&w=900', label: 'ئــەسپ' },
+                    { src: 'https://kurdaily.com/wp-content/uploads/2023/12/FB_IMG_1702808384776.jpg', label: 'ئـــاڵا' },
+                    { src: 'https://img.freepik.com/free-photo/beautiful-constellations-dark-blue-sky_23-2149988811.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ئـــەستێرە' },
+                    { src: 'https://www.universityofcalifornia.edu/sites/default/files/water-glass-photo.jpeg', label: 'ئاو' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZe6qTVZ0fu54ceUCPJvlrY2pYkwv0T8JCDk"
+            },
+            'ن': {
+                examples: ['نا', 'نە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/dried-pink-peony-flower-clear-vase-reflected-mirror_53876-103563.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ئاوێنە' },
+                    { src: 'https://img.freepik.com/free-photo/side-view-plate-with-cooked-rice-with-parsley-table_140725-12126.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'برنج' },
+                    { src: 'https://img.freepik.com/premium-photo/fashionable-womens-accessories-leather-wallet-comb-yellow-background_175682-8943.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'شانە' },
+                    { src: 'https://img.freepik.com/free-photo/high-angle-hand-wearing-gold-bracelet_23-2149836442.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بازن' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZg6qTVZEOlVg2D2OmbqesonSorofHoErLQk"
+            },
+            'ژ': {
+                examples: ['ژا', 'ژە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/woman-with-eyelashes-extension-side-view_23-2149909213.jpg?t=st=1735656441~exp=1735660041~hmac=75d0c907623d749784fcc819995ce40f1af2fcd7ba1f43b160281f34462e8781&w=826', label: 'برژانگ' },
+                    { src: 'https://img.freepik.com/free-photo/inspired-african-lady-dancing-with-eyes-closed-indoor-portrait-relaxed-black-girl-isolated_197531-10133.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'قژ' },
+                    { src: 'https://img.freepik.com/free-photo/top-close-up-view-raisins-green-black-raisins-brown-bowl-cream-table_140725-71467.jpg?t=st=1735656588~exp=1735660188~hmac=0803a5a8bad37fe1f5bad6b56f64cb72a09db3d3438ee74dea616c2d95fc48e2&w=900', label: 'مێوژ' },
+                    { src: 'https://img.freepik.com/free-photo/yellow-armchair-living-room-with-copy-space_43614-940.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ژوور' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZK6qTVZQ5BHuauQCSfMe9MABGDSN4IH6PSX"
+            },
+            'ێ': {
+                examples: ['ێا', 'ێە'],
+                images: [
+                    { src: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/abfeab88-aa6f-4098-a1de-f16d89d7c7b8/di76k95-b97e19fb-9c1e-4786-b346-58e5ace40bf2.jpg/v1/fit/w_600,h_1800,q_70,strp/lion___animals____zoo_____quality_10k_by_aland1w_di76k95-300w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTAyNDAiLCJwYXRoIjoiXC9mXC9hYmZlYWI4OC1hYTZmLTQwOTgtYTFkZS1mMTZkODlkN2M3YjhcL2RpNzZrOTUtYjk3ZTE5ZmItOWMxZS00Nzg2LWIzNDYtNThlNWFjZTQwYmYyLmpwZyIsIndpZHRoIjoiPD0xMDI0MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.bYqMe9M5NZ-KZYuEQa6EhEH_MBSIFyUio--ejwA0gUs', label: 'شێــر' },
+                    { src: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/abfeab88-aa6f-4098-a1de-f16d89d7c7b8/di76k61-d39b61f5-0dac-48ba-bee0-2e2d19fb7bd5.jpg/v1/fit/w_600,h_1800,q_70,strp/fox___animals____zoo_____quality_10k_by_aland1w_di76k61-300w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTAyNDAiLCJwYXRoIjoiXC9mXC9hYmZlYWI4OC1hYTZmLTQwOTgtYTFkZS1mMTZkODlkN2M3YjhcL2RpNzZrNjEtZDM5YjYxZjUtMGRhYy00OGJhLWJlZTAtMmUyZDE5ZmI3YmQ1LmpwZyIsIndpZHRoIjoiPD0xMDI0MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.CufmiC2tXHOwsWlO-6BpAxEELzsVWSbavFcWFAgTrag', label: 'ڕێــوی' },
+                    { src: 'https://img.freepik.com/premium-photo/cute-boy-holding-picture-frame-against-white-background_1048944-6914211.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'وێــنە' },
+                    { src: 'https://img.freepik.com/free-photo/summer-from-rural-landscape_1398-1205.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'دێ' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZE6qTVZly8pvxhKPQ0SuyqC33w56u8iPoWV"
+            },
+            'ب': {
+                examples: ['با', 'بە'],
+                images: [
+                    { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiaH1yOJGP7CpRu5XHAhx7O7LDPfnGszpLzg&s', label: 'بەفر' },
+                    { src: 'https://img.freepik.com/free-photo/goat-with-her-calf-wild_181624-31127.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بزن' },
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-bald-eagle-tree-branch-looking-its-prey_181624-29341.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'باز' },
+                    { src: 'https://img.freepik.com/free-photo/peeled-almonds-clay-plate-stone-tile-wooden-background_176474-5639.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'باوی' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZI6qTVZU1ccDP0Npqk91AvP4SPb6yHVlFNX"
+            },
+            'س': {
+                examples: ['سا', 'سە'],
+                images: [
+                    { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4CJG7yKAoxrHHPFgS0GE0N0ioVKciTphyGw&s', label: 'ســـێو' },
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-red-juicy-cherries-isolated_181624-35718.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'گێلاس' },
+                    { src: 'https://img.freepik.com/free-vector/flat-design-summer-car-illustration_23-2149447550.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'ســـەرباز' },
+                    { src: 'https://img.freepik.com/free-photo/isolated-hand-background-showing-invisible-object-gesture_53876-110819.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'دەســـت' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZ36qTVZ60yleXhRYIVt93V6gzvW6QwDDKpV"
+            },
+            'وو': {
+                examples: ['ووا', 'ووە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/closeup-shot-some-acorns-two-dry-leaves-put-piece-wood_181624-11500.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بەڕوو' },
+                    { src: 'https://img.freepik.com/free-photo/cotton-flowers_144627-37412.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'پەموو' },
+                    { src: 'https://img.freepik.com/premium-photo/cropped-hand-man-with-arms-raised-against-white-background_1048944-13974357.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybridhttps://img.freepik.com/premium-photo/cropped-hand-man-with-arms-raised-against-white-background_1048944-13974357.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بازوو' },
+                    { src: 'https://img.freepik.com/free-photo/front-view-colorful-threads-dark-surface_179666-37860.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'دەزوو' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZv6qTVZe7ElwxU0bUjhCnyyLoHyKf4yLYKk"
+            },
+            'م': {
+                examples: ['ما', 'مە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/close-up-young-woman-showing-her-teeth-tongue_1149-1023.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'دەم' },  
+                    { src: 'https://img.freepik.com/free-photo/asian-sort-melon-isolated-white_114579-26300.jpg?t=st=1735658426~exp=1735662026~hmac=98a630894e9c0e9184905eaaf342bd270b14d4263b0bc146c929b830cd0c980d&w=900', label: 'شەمــامــە' },
+                    { src: 'https://img.freepik.com/free-photo/harvesting-fresh-white-turnips-vegetable-high-quality-photo_114579-78554.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'شێلم' },
+                    { src: 'https://img.freepik.com/premium-photo/burning-candle-near-misted-window-christmas-decor_102556-1336.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'مــۆم' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZo6qTVZPr4UTz7fzhJccKDwMx37DSw8nTk7"
+            },
+            'ت': {
+                examples: ['تا', 'تە'],
+                images: [
+                    { src: 'https://img.freepik.com/free-photo/top-close-view-fresh-juicy-grapes-mellow-ed-white-background_140725-27453.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'تــرێ' },
+                    { src: 'https://img.freepik.com/free-photo/fresh-watermelon-table_1339-3947.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'شوتــی' },
+                    { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReM1yTXfXzM99hov_7cN1x6_JxEmlqyedMPQ&s', label: 'پرتـــەقاڵ' },
+                    { src: 'https://img.freepik.com/premium-photo/high-angle-view-pile-hail-stones_1048944-9564076.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'تەرزە' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZpEqTVZAbKegq9wG2QeUxlR5zlgoXE1jLvk"
+            },
+            'ک': {
+                examples: ['کا', 'کە'],
+                images: [
+                    { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIoa91GFHT65lskWYAmVqurY_LWPT9PovIhA&s', label: 'مریشک' },
+                    { src: 'https://img.freepik.com/free-photo/vertical-shot-pigeon-perched-metallic-tube_181624-50411.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'کــۆتر' },
+                    { src: 'https://cdn.britannica.com/04/117104-050-61C832A2/Chukar.jpg', label: 'کــەو' },
+                    { src: 'https://img.freepik.com/free-photo/charming-woman-with-bouquet_1153-2832.jpg?uid=R105845597&ga=GA1.1.814138674.1724358988&semt=ais_hybrid', label: 'بوک' },
+                ],
+                link : "https://u.pcloud.link/publink/show?code=kZREqTVZMT3pFBTdc3R4FDPJhf9H8yr0P8xV"
+            }
+        };
+
+        document.querySelectorAll('.letter-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const letter = button.dataset.letter;
+                const data = letterData[letter];
+                
+                const detailView = document.querySelector('.letter-detail');
+                detailView.querySelector('.letter').textContent = letter;
+                
+                const examples = detailView.querySelectorAll('.example');
+                examples[0].textContent = data.examples[0];
+                examples[1].textContent = data.examples[1];
+                
+                const imageContainer = detailView.querySelector('.image-container');
+                imageContainer.innerHTML = '';
+                data.images.forEach(image => {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.innerHTML = `
+                        <img src="${image.src}" alt="${image.label}" />
+                        <div class="image-label">${image.label}</div>
+                    `;
+                    imageContainer.appendChild(imgDiv);
+                });
+                
+                detailView.style.display = 'flex';
+                // Push state when opening detail view
+                history.pushState({ isDetailView: true }, '', '');
+            });
+        });
+        
+        // Handle the back button
+        window.addEventListener('popstate', (event) => {
+            const detailView = document.querySelector('.letter-detail');
+            if (detailView.style.display === 'flex') {
+                detailView.style.display = 'none';
+                // Prevent default back behavior
+                event.preventDefault();
+            }
+        });
+        
+        document.querySelector('.close-button').addEventListener('click', () => {
+            document.querySelector('.letter-detail').style.display = 'none';
+            // Go back in history when closing manually
+            history.back();
+        });
+        
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentLetter = document.querySelector('.letter-detail .letter').textContent;
+                const data = letterData[currentLetter];
+                
+                if (data?.link) {
+                    window.open(data.link, '_blank');
+                } else {
+                    alert(`هیچ لینکێک بوونی نییە بۆ پیتی ${currentLetter}`);
+                }
+            });
+        });
+        
+
+    </script>
+</body>
+</html>
