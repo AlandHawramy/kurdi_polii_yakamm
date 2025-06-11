@@ -124,7 +124,7 @@
             right: 1rem; /* شوێنی دوگمەکە دەباتە لای ڕاستی سەرەوە لە RTL دا */
             left: auto;  /* دڵنیایی دەدات لەوەی لای چەپ دیاری نەکراوە */
             z-index: 10; /* دەیخاتە سەرەوەی توخمەکانی تر */
-            transition: opacity 0.3s ease; /* گواستنەوەیەکی نەرم */
+            /* Transition removed as it's now always visible, no need for opacity transition */
         }
         /* ئەگەر دۆخی LTR بەکارهات (بۆ نموونە زمانی ئینگلیزی)، بیخەرە لای چەپ */
         html[dir="ltr"] .top-bar {
@@ -236,6 +236,8 @@
              text-align: center; /* Center grid items text */
              /* Default (Mobile): Aim for more items per row to reduce scroll */
             grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            /* ADDED: Margin at the bottom */
+            margin-bottom: 4rem;
         }
 
         .grid-item {
@@ -446,6 +448,8 @@
             /* Grid container for numbers/letters becomes denser on larger screens */
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                /* Adjusted margin for larger screens */
+                 margin-bottom: 6rem;
             }
             .example-grid {
                 grid-template-columns: repeat(4, 1fr); /* 4 examples per row on medium screens */
@@ -470,6 +474,8 @@
              /* Grid container for numbers/letters even denser on large screens */
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                 /* Ensure margin is still present on large screens */
+                 margin-bottom: 6rem;
             }
         }
 
@@ -493,9 +499,9 @@
 
     <div class="container" x-data="kurdishApp()">
 
-        <!-- Theme Toggle Button - Only visible when modal is NOT open -->
+        <!-- Theme Toggle Button - REMOVED x-show="!showModal" so it's always visible -->
         <!-- Added :class binding here -->
-        <div class="top-bar" x-show="!showModal">
+        <div class="top-bar">
             <button id="simple-theme-toggle" @click="toggleTheme()" :class="isDark ? 'dark' : 'light'" aria-label="گۆڕینی شێوازی ڕووناکی/تاریکی">
               <!-- Sun Icon - ADDED CLASS "icon-sun" -->
               <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
