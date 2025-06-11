@@ -7,7 +7,7 @@
     <!-- Google Fonts for Vazirmatn (friendly, modern Kurdish support) -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS Styles -->
-    <style>
+<style>
         /* Define theme colors using CSS variables (Light Theme Default) */
         :root {
             /* Purple Theme - ڕەنگە مۆرەکان */
@@ -121,7 +121,7 @@
         .top-bar {
             position: fixed; /* دەیپارێزێت لە شوێنی خۆی لەسەر شاشە */
             top: 1rem;
-            right: 1rem; /* شوێنی دوگمەکە دەباتە لای ڕاستی سەرەوە لە RTL دا */
+            right: 1rem; /* شوێنی دوگەکە دەباتە لای ڕاستی سەرەوە لە RTL دا */
             left: auto;  /* دڵنیایی دەدات لەوەی لای چەپ دیاری نەکراوە */
             z-index: 10; /* دەیخاتە سەرەوەی توخمەکانی تر */
             /* Transition removed as it's now always visible, no need for opacity transition */
@@ -133,20 +133,29 @@
         }
 
         #simple-theme-toggle {
+            position: fixed; /* ئەمە وا دەکات دوگمەکە بە شاشەوە بنووسێت و نەجوڵێت بە سکرۆڵ */
+            top: 20px;          /* شوێنی سەرەوە - ئەمە بە سکرۆڵ ناگۆڕدرێت */
+            right: 20px;        /* شوێنی ڕاست - ئەمەش بە سکرۆڵ ناگۆڕدرێت */
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px; /* Small fixed size */
-            height: 40px; /* Small fixed size */
-            border-radius: 50%; /* Make it round */
-            border: none; /* No border */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
             cursor: pointer;
-            background-color: var(--theme-bg-main); /* Match main background */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            background-color: var(--theme-bg-main);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
             padding: 0;
-            overflow: hidden; /* Hide parts of icons not in view */
-            position: relative; /* For absolute positioning of icons inside */
+            overflow: hidden;
+            z-index: 1000;      /* زۆر بەرز بۆ ئەوەی لەسەر هەموو شتێک بێت */
+        }
+
+        /* بۆ LTR زمانەکان، دوگمەکە بخەرە سەر لای چەپ */
+        html[dir="ltr"] #simple-theme-toggle {
+            left: 20px;
+            right: auto;
         }
 
         #simple-theme-toggle:hover {
@@ -445,6 +454,17 @@
                 left: 2rem;
                 right: auto;
             }
+            
+            /* دوگمەی گۆڕینی دۆخ لە شاشە گەورەکاندا */
+            #simple-theme-toggle {
+                top: 20px; /* بەهەمان شێوە جێگیر دەمێنێتەوە */
+                right: 20px;
+            }
+            html[dir="ltr"] #simple-theme-toggle {
+                left: 20px;
+                right: auto;
+            }
+            
             /* Grid container for numbers/letters becomes denser on larger screens */
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -481,7 +501,7 @@
 
         /* Hide element when AlpineJS x-cloak is used */
         [x-cloak] { display: none !important; }
-    </style>
+</style>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
